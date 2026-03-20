@@ -1,8 +1,13 @@
 # Importem la llista 'path' del mòdul sys per poder modificar les rutes de cerca de mòduls
 from sys import path
+from pathlib import Path
  
 # Afegim la ruta del fitxer ZIP que conté els paquets Python al final de sys.path
-path.append('..\\package\\extrapack.zip')
+# path.append('..\\package\\extrapack.zip')
+# path.append('C:\\Users\\Jose\\OneDrive - Stucom, S.A\\Escritorio\\Cursos\\python_curso\\myFirstPython\\08_Modules_Packages_PIP\\custom_package\\package\\extrapack.zip')
+# path.append('..\\package\\extrapack.zip')
+package_path = Path(__file__).parent.parent / 'package/extrapack.zip'
+path.insert(0, str(package_path))
  
 # Importem el mòdul sigma del paquet extra.good.best i li assignem l'àlies 'sig'
 import extra.good.best.sigma as sig  # type: ignore

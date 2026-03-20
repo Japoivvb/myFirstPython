@@ -1,6 +1,7 @@
-# list with () )
+# list with () ) as enumeration values
 # coordenates
 map = (14,50,60)
+colors = "blue", "red", "yellow"
 # print each element
 print(map[0])
 print(map[1])
