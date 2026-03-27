@@ -328,63 +328,150 @@ def find_by_text(students, text):
     return found_students
 
 
-def filtrar_per_domini_email(llista_estudiants, domini):
+def filter_by_email_domain(students, domain):
     """
-    Filtra estudiants que tinguin un email d'un domini específic.
-    Exemple: domini="example.com" retorna estudiants amb "@example.com"
+    Filter students who has an email for a given domain
+    Example: domain="example.com" return students with "@example.com"
     
     Args:
-        llista_estudiants (list): Llista d'estudiants
-        domini (str): Domini a filtrar (sense @)
+        students list (list): list of students
+        domain (str): Domain to filter (without @)
         
     Returns:
-        list: Llista d'estudiants filtrats
+        list: filter students list
     """
-    # TODO: Implementa el filtratge
-    pass
-
+    filter_students =[]
+    for student in students:  
+        domain_student = student["email"].split("@")      
+        if domain in domain_student[1]:
+            filter_students.append(student)
+    return filter_students
 
 # ============================================================================
 # ETAPA 4: GENERACIÓ D'INFORMES
 # ============================================================================
 
-def generar_informe_basic(llista_estudiants):
+def generate_basic_report(students):
     """
-    Genera un informe de text amb la informació de tots els estudiants.
+    Generate a text report with the student information.
     
     Format:
     ========================================
-    INFORME D'ESTUDIANTS
+    STUDENTS REPORT
     ========================================
-    Total d'estudiants: X
+    Students total: X
     
-    CODI      | NOM COMPLET           | EMAIL
+    CODE      | FULL NAME           | EMAIL
     -----------------------------------------------
     EST-1234  | Joan García López     | joan@example.com
     ...
     
     Returns:
-        str: L'informe formatat
+        str: the formatted report
     """
-    # TODO: Implementa la generació de l'informe
-    pass
+    report = ""
+    report += "=" * 40
+    report += "\n"
+    report += "STUDENTS REPORT"
+    report += "\n"
+    report += "=" * 40
+    report += "\n"
+    report += "Students total: " + str(len(students))
+    report += "\n"
+    report += "\n"
+    report += "CODE      | FULL NAME           | EMAIL"
+    report += "\n"
+    report += "-" * 47
+    report += "\n"
+
+    # for each student
+    detail_students =""
+    for student in students: 
+        detail_students += " " + student["code"] + " "
+        detail_students += "|"
+        detail_students += " " + student["name"] + " " + student["surname"] + " "
+        detail_students += "|"
+        detail_students += " " + student["email"]
+        detail_students += "\n"     
+
+    report += detail_students
+    report += "\n"     
+
+    return report
 
 
-def generar_estadistiques(llista_estudiants):
+
+
+def generate_statistics(students):
     """
-    Genera estadístiques sobre els estudiants.
+    Generate statistics.
     
-    Estadístiques a calcular:
-    - Nombre total d'estudiants
-    - Longitud mitjana dels noms complets
-    - Domini de correu més comú
-    - Llista de tots els dominis únics
+    statistics to calculate:
+    - Number total of students
+    - Average length of full names
+    - Email domain most common
+    - List unique domain
     
     Returns:
         dict: Diccionari amb les estadístiques
     """
-    # TODO: Implementa el càlcul d'estadístiques
-    pass
+    statistics={}
+
+    # Number total of students    
+    print("Number total of students: " + str(len(students)))
+    statistics["total"] = len(students)
+
+    # Average length of full names
+    total_length = 0
+    for student in students:   
+        full_name = student["name"] + student["surname"] 
+
+        total_length += len(full_name)
+    print("Average of full names: " + str(total_length/len(students)))
+    statistics["average"] = total_length/len(students)
+
+    # Email domain most common
+    domain_list = []
+    for student in students:   
+        domain_student = student["email"].split("@")  
+        domain_list.append(domain_student[1])
+    domain_list.sort()
+    print(domain_list)
+
+    max_times_domain=0
+    max_domain=0
+    current_times_domain=0
+    current_domain=""
+    for domain in domain_list:
+        if domain == current_domain:
+            current_times_domain+=1
+        else:
+            # save max domain
+            if(current_times_domain > max_times_domain):
+                max_domain = current_domain
+                max_times_domain = current_times_domain
+
+            current_domain = domain
+            current_times_domain = 1
+    print("Max domain: " + max_domain + " founded " + str(max_times_domain))
+    statistics["max_domain"] = max_domain
+
+  
+    # List unique domain
+    domain_unique = []
+    for student in students:   
+        domain_student = student["email"].split("@")  
+        if domain_student[1] not in domain_unique:
+            domain_unique.append(domain_student[1])
+    print(domain_unique)    
+    statistics["unique_domain"] = max_domain
+
+    return statistics
+     
+
+
+
+
 
 
 
@@ -452,20 +539,18 @@ def main_program():
                 code = input("Give me a text: ").strip()
                 show_students(find_by_text(students, code))
                 
-            elif option == "5":
-                # TODO: Implementa el filtratge per domini
-                pass
+            elif option == "5":# filter by domain
+                domain = input("Give me a domain: ").strip()
+                show_students(filter_by_email_domain(students, domain))
                 
             elif option == "6":# show all students
                 show_students(students)
 
-            elif option == "7":
-                # TODO: Genera i mostra l'informe
-                pass
+            elif option == "7":# generate report
+                print(generate_basic_report(students))
                 
-            elif option == "8":
-                # TODO: Mostra estadístiques
-                pass
+            elif option == "8":# show statistics
+                print(generate_statistics(students))
                 
             else:
                 print("\nOpcio no valida. Tria un numero del 0 al 8.")
@@ -484,7 +569,7 @@ def main_program():
 
 TEST_DATA = """EST-1001|Maria|Fernández Garcia|maria.fernandez@example.com
 EST-1002|Pere|Martínez López|pere.martinez@escola.cat
-
+EST-1003|Anna|Sánchez Ruiz|anna.sanchez@example.com
 EST-1003|Anna|Sánchez Ruiz|anna.sanchez@example.com
 EST-1004|Josep|García Pérez|josep.garcia@escola.cat
 EST-1005|Laura|Rodríguez Torres|laura.rodriguez@gmail.com"""

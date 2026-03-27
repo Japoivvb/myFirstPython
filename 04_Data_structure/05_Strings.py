@@ -72,6 +72,9 @@ print('aBcD'.capitalize())
 # to center a word between spaces
 print('[' + 'Beta'.center(8) + ']')
 
+# to check how to starts
+t = "zeta"
+print(t.startswith("z"))
 # to check how to ends
 t = "zeta"
 print(t.endswith("a"))
