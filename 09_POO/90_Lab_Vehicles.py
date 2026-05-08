@@ -8,6 +8,9 @@ class Vehicle:
         
     def stats(self):
         print(self.mark, self.speed )
+    
+    def __str__(self):
+        return ("values" + self.mark)
 
 class Car(Vehicle):
     def hornet(self):
@@ -20,6 +23,8 @@ class Bicyle(Vehicle):
 v1 = Vehicle("Seat", 120)
 v1.accelerate(15)
 v1.stats()
+# print(v1.__str__())
+print(v1)
 
 c1 = Car("BMW",100)
 c1.accelerate(50)
